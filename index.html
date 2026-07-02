@@ -120,6 +120,16 @@
   .nav-toggle span{width:26px;height:2px;background:var(--white);transition:.3s;}
   .nav.scrolled .nav-toggle span{background:var(--navy);}
 
+  .lang-switch{
+    display:inline-flex;align-items:center;gap:6px;background:transparent;
+    border:1.5px solid rgba(255,255,255,.5);color:var(--white);
+    padding:8px 14px;border-radius:20px;font-weight:800;font-size:12.5px;
+    cursor:pointer;transition:all .3s ease;font-family:'Lato',sans-serif;
+  }
+  .lang-switch:hover{background:rgba(255,255,255,.12);}
+  .nav.scrolled .lang-switch{border-color:var(--border);color:var(--navy);}
+  .nav.scrolled .lang-switch:hover{background:rgba(11,31,63,.06);}
+
   @media(max-width:860px){
     .nav-links{
       position:fixed;top:0;right:-100%;height:100vh;width:75%;max-width:320px;
@@ -129,7 +139,31 @@
     .nav-links.open{right:0;}
     .nav-links a{color:var(--white)!important;font-size:17px;}
     .nav-toggle{display:flex;}
+    .nav-links .lang-switch{color:var(--white)!important;border-color:rgba(255,255,255,.5)!important;}
   }
+
+  /* ---------- LANGUAGE MODAL ---------- */
+  .lang-modal{
+    position:fixed;inset:0;z-index:3000;background:rgba(10,24,48,.92);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;padding:24px;
+    opacity:1;visibility:visible;transition:opacity .35s ease, visibility .35s ease;
+  }
+  .lang-modal.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .lang-modal-card{
+    background:var(--cream);border-radius:24px;padding:48px 40px;max-width:420px;width:100%;
+    text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.4);border-top:4px solid var(--gold);
+  }
+  .lang-modal-logo{width:64px;height:64px;object-fit:contain;margin:0 auto 20px;}
+  .lang-modal-card h3{font-size:22px;margin-bottom:10px;}
+  .lang-modal-card p{color:var(--gray);font-size:14.5px;margin-bottom:28px;line-height:1.6;}
+  .lang-modal-btns{display:flex;gap:14px;}
+  .lang-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 14px;
+    border-radius:16px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;
+    font-weight:800;font-size:14.5px;color:var(--navy);transition:all .25s ease;font-family:'Lato',sans-serif;
+  }
+  .lang-btn .flag{font-size:28px;}
+  .lang-btn:hover{border-color:var(--gold);background:rgba(201,162,39,.06);transform:translateY(-3px);}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -260,6 +294,9 @@
   .service-quote{font-size:13px;font-weight:900;color:var(--teal);letter-spacing:.3px;display:inline-flex;align-items:center;gap:6px;}
   .service-quote svg{width:14px;height:14px;transition:transform .3s ease;}
   .service-card:hover .service-quote svg{transform:translateX(5px);}
+  .service-includes{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0 0 22px;}
+  .service-includes li{position:relative;padding-left:24px;font-size:13.5px;color:var(--gray);line-height:1.5;}
+  .service-includes li::before{content:'\2713';position:absolute;left:0;top:0;color:var(--teal);font-weight:900;}
 
   @media(max-width:960px){.services-grid{grid-template-columns:1fr 1fr;}}
   @media(max-width:620px){.services-grid{grid-template-columns:1fr;}}
@@ -375,6 +412,18 @@
 </head>
 <body>
 
+<div class="lang-modal" id="langModal">
+  <div class="lang-modal-card">
+    <img class="lang-modal-logo" src="assets/logo-vvv-trans.png" alt="VVV Services LLC logo">
+    <h3>Welcome! / &iexcl;Bienvenido!</h3>
+    <p>Choose your language to continue<br>Elige tu idioma para continuar</p>
+    <div class="lang-modal-btns">
+      <button type="button" class="lang-btn" data-lang="en"><span class="flag">&#127482;&#127480;</span> English</button>
+      <button type="button" class="lang-btn" data-lang="es"><span class="flag">&#127474;&#127485;</span> Espa&ntilde;ol</button>
+    </div>
+  </div>
+</div>
+
 <nav class="nav" id="nav">
   <div class="wrap">
     <a href="#top" class="nav-logo">
@@ -383,16 +432,17 @@
       </span>
       <span class="nav-brand">
         <span class="name">VVV Services LLC</span>
-        <span class="tag">Bookkeeping &amp; More</span>
+        <span class="tag" data-i18n="brand_tagline">Bookkeeping &amp; More</span>
       </span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="nav-links" id="navLinks">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#booking">Book Now</a>
-      <a href="#contact">Contact</a>
-      <a href="#booking" class="nav-cta">Free Consultation</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#services" data-i18n="nav_services">Services</a>
+      <a href="#booking" data-i18n="nav_book">Book Now</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+      <a href="#booking" class="nav-cta" data-i18n="nav_cta">Free Consultation</a>
+      <button type="button" id="langSwitch" class="lang-switch" aria-label="Switch language">&#127760; ES</button>
     </div>
   </div>
 </nav>
@@ -402,26 +452,26 @@
   <div class="hero-blob blob-2" data-parallax="0.18"></div>
   <div class="hero-blob blob-3" data-parallax="0.35"></div>
   <div class="hero-content">
-    <span class="hero-eyebrow reveal">Bookkeeping &amp; More</span>
-    <h1 class="reveal">Bookkeeping done right,<br><em>so your business runs smoother.</em></h1>
-    <p class="reveal">VVV Services LLC helps Arizona small businesses stay organized, compliant, and stress-free — bookkeeping, payroll, LLC formation, 1099s and TPT filings, handled by GD Rocio Avila.</p>
+    <span class="hero-eyebrow reveal" data-i18n="brand_tagline">Bookkeeping &amp; More</span>
+    <h1 class="reveal" data-i18n-html="hero_h1">Bookkeeping done right,<br><em>so your business runs smoother.</em></h1>
+    <p class="reveal" data-i18n="hero_p">VVV Services LLC helps Arizona small businesses stay organized, compliant, and stress-free — bookkeeping, payroll, LLC formation, 1099s and TPT filings, handled by GD Rocio Avila.</p>
     <div class="hero-ctas reveal">
-      <a href="#booking" class="btn btn-primary">Book Your Free Consultation</a>
-      <a href="tel:+16236336023" class="btn btn-outline">Call (623) 633-6023</a>
+      <a href="#booking" class="btn btn-primary" data-i18n="hero_cta_primary">Book Your Free Consultation</a>
+      <a href="tel:+16236336023" class="btn btn-outline" data-i18n="hero_cta_outline">Call (623) 633-6023</a>
     </div>
   </div>
-  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+  <div class="scroll-cue"><span data-i18n="scroll_cue">Scroll</span><span class="line"></span></div>
 </section>
 
 <section class="about" id="about">
   <div class="wrap">
     <div class="about-text reveal-left">
-      <span class="section-eyebrow">About Us</span>
-      <h2>Meet your <em>bookkeeping specialist</em></h2>
-      <p>GD Rocio Avila founded VVV Services LLC to give small business owners something they rarely get from bookkeeping: a real point of contact who knows their numbers by name.</p>
-      <p>Whether you're forming a new LLC, catching up on payroll, or filing your annual 1099-NECs and TPT applications, VVV Services LLC keeps your books accurate and your business compliant — with a free consultation to start.</p>
+      <span class="section-eyebrow" data-i18n="about_eyebrow">About Us</span>
+      <h2 data-i18n-html="about_h2">Meet your <em>bookkeeping specialist</em></h2>
+      <p data-i18n="about_p1">GD Rocio Avila founded VVV Services LLC to give small business owners something they rarely get from bookkeeping: a real point of contact who knows their numbers by name.</p>
+      <p data-i18n="about_p2">Whether you're forming a new LLC, catching up on payroll, or filing your annual 1099-NECs and TPT applications, VVV Services LLC keeps your books accurate and your business compliant — with a free consultation to start.</p>
       <div class="about-signature">GD Rocio Avila
-        <span>Bookkeeping Specialist, VVV Services LLC</span>
+        <span data-i18n="about_sig_role">Bookkeeping Specialist, VVV Services LLC</span>
       </div>
     </div>
     <div class="about-visual reveal-scale">
@@ -430,30 +480,30 @@
       </div>
       <div class="stat-chip">
         <div class="num" data-count="5">0</div>
-        <div class="label">Core Services</div>
+        <div class="label" data-i18n="stat_label">Core Services</div>
       </div>
     </div>
 
     <div class="about-features">
       <div class="feat-item reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 12l2 2 4-4M12 3a9 9 0 100 18 9 9 0 000-18z"/></svg></div>
-        <h4>Personalized Attention</h4>
-        <p>One dedicated specialist who actually knows your business.</p>
+        <h4 data-i18n="feat1_h">Personalized Attention</h4>
+        <p data-i18n="feat1_p">One dedicated specialist who actually knows your business.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
-        <h4>Confidential &amp; Accurate</h4>
-        <p>Your financial information is always handled with care.</p>
+        <h4 data-i18n="feat2_h">Confidential &amp; Accurate</h4>
+        <p data-i18n="feat2_p">Your financial information is always handled with care.</p>
       </div>
       <div class="feat-item reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
-        <h4>On-Time, Every Time</h4>
-        <p>Payroll, 1099s and TPT filings, always filed on schedule.</p>
+        <h4 data-i18n="feat3_h">On-Time, Every Time</h4>
+        <p data-i18n="feat3_p">Payroll, 1099s and TPT filings, always filed on schedule.</p>
       </div>
       <div class="feat-item reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 20V10M12 20V4M20 20v-7"/></svg></div>
-        <h4>Free Consultation</h4>
-        <p>Start with a no-obligation conversation about your business.</p>
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <h4 data-i18n="feat4_h">Here When You Need Us</h4>
+        <p data-i18n="feat4_p">Call or text anytime with day-to-day questions — real support, always.</p>
       </div>
     </div>
   </div>
@@ -462,45 +512,50 @@
 <section class="services" id="services">
   <div class="wrap">
     <div class="services-head reveal">
-      <span class="section-eyebrow">Our Services</span>
-      <h2>Everything your business books need</h2>
-      <p>Pricing is tailored to the size and needs of your business — request a free, no-obligation quote for any service below.</p>
+      <span class="section-eyebrow" data-i18n="services_eyebrow">Our Services</span>
+      <h2 data-i18n="services_h2">Everything your business books need</h2>
+      <p data-i18n="services_p">Pricing is tailored to the size and needs of your business — request a free, no-obligation quote for any service below.</p>
     </div>
     <div class="services-grid">
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></div>
-        <h3>Bookkeeping</h3>
-        <p>Accurate, up-to-date financial records so you always know where your business stands.</p>
-        <a href="#booking" class="service-quote">Request a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <h3 data-i18n="svc1_h">Bookkeeping</h3>
+        <p data-i18n="svc1_p">Accurate, up-to-date monthly bookkeeping tailored to your business.</p>
+        <ul class="service-includes">
+          <li data-i18n="svc1_inc1">Monthly financial statements — Profit &amp; Loss, Balance Sheet &amp; more</li>
+          <li data-i18n="svc1_inc2">Personalized service for every client</li>
+          <li data-i18n="svc1_inc3">Call or text anytime with day-to-day questions — real support, always</li>
+        </ul>
+        <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div>
-        <h3>LLC Formation &amp; Amendments</h3>
-        <p>Start your LLC the right way, or update your existing filings without the paperwork headache.</p>
-        <a href="#booking" class="service-quote">Request a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <h3 data-i18n="svc2_h">LLC Formation &amp; Amendments</h3>
+        <p data-i18n="svc2_p">Start your LLC the right way, or update your existing filings without the paperwork headache.</p>
+        <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a2 2 0 110 4H9"/></svg></div>
-        <h3>Payroll</h3>
-        <p>Reliable, compliant payroll processing so your team is always paid accurately and on time.</p>
-        <a href="#booking" class="service-quote">Request a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <h3 data-i18n="svc3_h">Payroll</h3>
+        <p data-i18n="svc3_p">Reliable, compliant payroll processing so your team is always paid accurately and on time.</p>
+        <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5M9 13h6M9 17h6"/></svg></div>
-        <h3>1099-NEC Filing</h3>
-        <p>Contractor filings prepared and submitted correctly, before deadlines catch you off guard.</p>
-        <a href="#booking" class="service-quote">Request a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <h3 data-i18n="svc4_h">1099-NEC Filing</h3>
+        <p data-i18n="svc4_p">Contractor filings prepared and submitted correctly, before deadlines catch you off guard.</p>
+        <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l3 6 6.5 1-4.7 4.5 1.1 6.5L12 17l-5.9 3 1.1-6.5L2.5 9l6.5-1z"/></svg></div>
-        <h3>TPT Applications</h3>
-        <p>Arizona Transaction Privilege Tax license applications, handled from start to finish.</p>
-        <a href="#booking" class="service-quote">Request a Quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <h3 data-i18n="svc5_h">TPT Applications</h3>
+        <p data-i18n="svc5_p">Arizona Transaction Privilege Tax license applications, handled from start to finish.</p>
+        <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
 
     </div>
@@ -512,72 +567,72 @@
   <div class="booking-blob book-blob-2"></div>
   <div class="wrap">
     <div class="booking-intro reveal-left">
-      <span class="section-eyebrow">Free Consultation</span>
-      <h2>Book your consultation or call</h2>
-      <p>Tell us a bit about your business and preferred time — we'll confirm your free consultation or call directly. <strong>Service is by appointment only.</strong></p>
+      <span class="section-eyebrow" data-i18n="booking_eyebrow">Free Consultation</span>
+      <h2 data-i18n="booking_h2">Book your consultation or call</h2>
+      <p data-i18n-html="booking_p">Tell us a bit about your business and preferred time — we'll confirm your free consultation or call directly. <strong>Service is by appointment only.</strong></p>
       <a href="https://calendar.app.google/7eZ2fiJoDoUNwD5d6" target="_blank" rel="noopener" class="btn btn-primary booking-cal-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
-        Book Instantly on Google Calendar
+        <span data-i18n="cal_btn">Book Instantly on Google Calendar</span>
       </a>
       <div class="quick-contacts">
         <a href="tel:+16236336023" class="quick-item">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .7 3a2 2 0 01-.5 2.1L8 10.1a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c1 .3 2 .5 3 .7a2 2 0 011.6 2z"/></svg>
-          <span><span class="q-label">Cell</span><br><span class="q-value">(623) 633-6023</span></span>
+          <span><span class="q-label" data-i18n="q_cell">Cell</span><br><span class="q-value">(623) 633-6023</span></span>
         </a>
         <a href="tel:+16232597023" class="quick-item">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .7 3a2 2 0 01-.5 2.1L8 10.1a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c1 .3 2 .5 3 .7a2 2 0 011.6 2z"/></svg>
-          <span><span class="q-label">Office</span><br><span class="q-value">(623) 259-7023</span></span>
+          <span><span class="q-label" data-i18n="q_office">Office</span><br><span class="q-value">(623) 259-7023</span></span>
         </a>
         <a href="mailto:rocio@vvvservicesaz.com" class="quick-item">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
-          <span><span class="q-label">Email</span><br><span class="q-value">rocio@vvvservicesaz.com</span></span>
+          <span><span class="q-label" data-i18n="q_email">Email</span><br><span class="q-value">rocio@vvvservicesaz.com</span></span>
         </a>
       </div>
-      <p class="booking-note">Or fill out the form and we'll confirm your appointment directly.</p>
+      <p class="booking-note" data-i18n="booking_note">Or fill out the form and we'll confirm your appointment directly.</p>
     </div>
 
     <form class="booking-form reveal-right" id="bookingForm">
       <div class="form-row">
         <div class="form-group">
-          <label for="fname">Full Name</label>
-          <input type="text" id="fname" required placeholder="Jane Smith">
+          <label for="fname" data-i18n="form_name">Full Name</label>
+          <input type="text" id="fname" required placeholder="Jane Smith" data-i18n-placeholder="form_name_ph">
         </div>
         <div class="form-group">
-          <label for="fphone">Phone</label>
-          <input type="tel" id="fphone" required placeholder="(602) 000-0000">
+          <label for="fphone" data-i18n="form_phone">Phone</label>
+          <input type="tel" id="fphone" required placeholder="(602) 000-0000" data-i18n-placeholder="form_phone_ph">
         </div>
       </div>
       <div class="form-group">
-        <label for="femail">Email</label>
-        <input type="email" id="femail" required placeholder="you@email.com">
+        <label for="femail" data-i18n="form_email">Email</label>
+        <input type="email" id="femail" required placeholder="you@email.com" data-i18n-placeholder="form_email_ph">
       </div>
       <div class="form-group">
-        <label for="fservice">Service Interested In</label>
+        <label for="fservice" data-i18n="form_service">Service Interested In</label>
         <select id="fservice">
-          <option>Bookkeeping</option>
-          <option>LLC Formation &amp; Amendments</option>
-          <option>Payroll</option>
-          <option>1099-NEC Filing</option>
-          <option>TPT Applications</option>
-          <option>Not sure yet</option>
+          <option data-i18n="opt_bookkeeping">Bookkeeping</option>
+          <option data-i18n="opt_llc">LLC Formation &amp; Amendments</option>
+          <option data-i18n="opt_payroll">Payroll</option>
+          <option data-i18n="opt_1099">1099-NEC Filing</option>
+          <option data-i18n="opt_tpt">TPT Applications</option>
+          <option data-i18n="opt_notsure">Not sure yet</option>
         </select>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="fdate">Preferred Date</label>
+          <label for="fdate" data-i18n="form_date">Preferred Date</label>
           <input type="date" id="fdate">
         </div>
         <div class="form-group">
-          <label for="ftime">Preferred Time</label>
+          <label for="ftime" data-i18n="form_time">Preferred Time</label>
           <input type="time" id="ftime" min="10:00" max="18:00" step="1800" value="10:00">
         </div>
       </div>
       <div class="form-group">
-        <label for="fmsg">Message</label>
-        <textarea id="fmsg" placeholder="Tell us a bit about your business..."></textarea>
+        <label for="fmsg" data-i18n="form_msg">Message</label>
+        <textarea id="fmsg" placeholder="Tell us a bit about your business..." data-i18n-placeholder="form_msg_ph"></textarea>
       </div>
-      <button type="submit" class="btn btn-primary form-submit">Request Appointment</button>
-      <div class="form-success" id="formSuccess">Thanks! Your email app should now be open with your request ready to send to Rocio.</div>
+      <button type="submit" class="btn btn-primary form-submit" data-i18n="form_submit">Request Appointment</button>
+      <div class="form-success" id="formSuccess" data-i18n="form_success_mailto">Thanks! Your email app should now be open with your request ready to send to Rocio.</div>
     </form>
   </div>
 </section>
@@ -585,29 +640,29 @@
 <section class="contact" id="contact">
   <div class="wrap">
     <div class="reveal-left">
-      <span class="section-eyebrow">Contact</span>
-      <h2>Let's talk about your business</h2>
+      <span class="section-eyebrow" data-i18n="contact_eyebrow">Contact</span>
+      <h2 data-i18n="contact_h2">Let's talk about your business</h2>
       <div class="contact-info">
         <div class="info-row">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
           <div>
-            <div class="i-label">Business Hours</div>
-            <div class="i-value">Monday &ndash; Friday · 10:00 AM &ndash; 6:00 PM</div>
-            <div class="i-value">Saturday · 10:00 AM &ndash; 3:00 PM</div>
-            <div class="hours-note">By appointment only</div>
+            <div class="i-label" data-i18n="hours_label">Business Hours</div>
+            <div class="i-value" data-i18n="hours_weekday">Monday &ndash; Friday · 10:00 AM &ndash; 6:00 PM</div>
+            <div class="i-value" data-i18n="hours_sat">Saturday · 10:00 AM &ndash; 3:00 PM</div>
+            <div class="hours-note" data-i18n="hours_note">By appointment only</div>
           </div>
         </div>
         <div class="info-row">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <div><div class="i-label">Service Area</div><div class="i-value">Serving businesses across Arizona</div></div>
+          <div><div class="i-label" data-i18n="area_label">Service Area</div><div class="i-value" data-i18n="area_value">Serving businesses across Arizona</div></div>
         </div>
         <div class="info-row">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
-          <div><div class="i-label">Email</div><div class="i-value">rocio@vvvservicesaz.com</div></div>
+          <div><div class="i-label" data-i18n="email_label">Email</div><div class="i-value">rocio@vvvservicesaz.com</div></div>
         </div>
         <div class="info-row">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>
-          <div><div class="i-label">eFax</div><div class="i-value">(623) 267-9378</div></div>
+          <div><div class="i-label" data-i18n="efax_label">eFax</div><div class="i-value">(623) 267-9378</div></div>
         </div>
       </div>
     </div>
@@ -615,7 +670,7 @@
       <div class="map-placeholder">
         <img src="assets/logo-vvv-trans.png" alt="VVV Services LLC logo" style="width:110px;height:110px;object-fit:contain;">
         <h4 style="margin-top:8px;">VVV Services LLC</h4>
-        <p>Bookkeeping &amp; More &mdash; Free Consultation available for every new client.</p>
+        <p data-i18n="map_desc">Bookkeeping &amp; More &mdash; Free Consultation available for every new client.</p>
       </div>
     </div>
   </div>
@@ -627,16 +682,191 @@
       <img src="assets/logo-vvv-trans.png" alt="VVV Services LLC logo" style="width:24px;height:24px;object-fit:contain;">
       <span>VVV Services LLC</span>
     </div>
-    <p>&copy; 2026 VVV Services LLC. All rights reserved.</p>
+    <p data-i18n="footer_copy">&copy; 2026 VVV Services LLC. All rights reserved.</p>
   </div>
 </footer>
 
-<a href="https://wa.me/16236336023?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20consultation%20with%20VVV%20Services%20LLC" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+<a href="https://wa.me/16236336023?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20consultation%20with%20VVV%20Services%20LLC" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" data-i18n-aria="wa_aria">
   <svg viewBox="0 0 32 32"><path d="M16.02 3C9.4 3 4 8.4 4 15.02c0 2.36.68 4.55 1.86 6.4L4 29l7.76-1.83a11.97 11.97 0 004.26.78h.01c6.62 0 12.01-5.4 12.01-12.02C28.04 8.4 22.65 3 16.02 3zm0 21.9h-.01a9.9 9.9 0 01-5.05-1.38l-.36-.21-4.6 1.09 1.23-4.48-.24-.37a9.86 9.86 0 01-1.51-5.23c0-5.46 4.45-9.9 9.92-9.9 2.65 0 5.13 1.03 7.01 2.9a9.85 9.85 0 012.9 7.01c0 5.47-4.45 9.9-9.92 9.9zm5.44-7.42c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.24-.46-2.37-1.47-.87-.78-1.46-1.74-1.63-2.04-.17-.3-.02-.46.13-.6.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>
 </a>
 
 <script>
 (function(){
+  const I18N = {
+    brand_tagline: { en: 'Bookkeeping &amp; More', es: 'Contabilidad y M&aacute;s' },
+    nav_about: { en: 'About', es: 'Nosotros' },
+    nav_services: { en: 'Services', es: 'Servicios' },
+    nav_book: { en: 'Book Now', es: 'Agenda Ahora' },
+    nav_contact: { en: 'Contact', es: 'Contacto' },
+    nav_cta: { en: 'Free Consultation', es: 'Consulta Gratis' },
+
+    hero_h1: { en: 'Bookkeeping done right,<br><em>so your business runs smoother.</em>', es: 'Contabilidad hecha bien,<br><em>para que tu negocio funcione mejor.</em>' },
+    hero_p: { en: 'VVV Services LLC helps Arizona small businesses stay organized, compliant, and stress-free — bookkeeping, payroll, LLC formation, 1099s and TPT filings, handled by GD Rocio Avila.', es: 'VVV Services LLC ayuda a los pequeños negocios de Arizona a mantenerse organizados, en regla y sin estrés — contabilidad, nómina, formación de LLC, 1099 y trámites de TPT, a cargo de GD Rocio Avila.' },
+    hero_cta_primary: { en: 'Book Your Free Consultation', es: 'Agenda tu Consulta Gratis' },
+    hero_cta_outline: { en: 'Call (623) 633-6023', es: 'Llama al (623) 633-6023' },
+    scroll_cue: { en: 'Scroll', es: 'Desliza' },
+
+    about_eyebrow: { en: 'About Us', es: 'Nosotros' },
+    about_h2: { en: 'Meet your <em>bookkeeping specialist</em>', es: 'Conoce a tu <em>especialista en contabilidad</em>' },
+    about_p1: { en: 'GD Rocio Avila founded VVV Services LLC to give small business owners something they rarely get from bookkeeping: a real point of contact who knows their numbers by name.', es: 'GD Rocio Avila fundó VVV Services LLC para darles a los dueños de pequeños negocios algo que rara vez obtienen de la contabilidad: un punto de contacto real que conoce sus números de memoria.' },
+    about_p2: { en: "Whether you're forming a new LLC, catching up on payroll, or filing your annual 1099-NECs and TPT applications, VVV Services LLC keeps your books accurate and your business compliant — with a free consultation to start.", es: 'Ya sea que estés formando una nueva LLC, poniéndote al día con la nómina, o presentando tus 1099-NEC y solicitudes de TPT anuales, VVV Services LLC mantiene tus libros precisos y tu negocio en regla — comenzando con una consulta gratuita.' },
+    about_sig_role: { en: 'Bookkeeping Specialist, VVV Services LLC', es: 'Especialista en Contabilidad, VVV Services LLC' },
+    stat_label: { en: 'Core Services', es: 'Servicios Principales' },
+
+    feat1_h: { en: 'Personalized Attention', es: 'Atención Personalizada' },
+    feat1_p: { en: 'One dedicated specialist who actually knows your business.', es: 'Una especialista dedicada que realmente conoce tu negocio.' },
+    feat2_h: { en: 'Confidential &amp; Accurate', es: 'Confidencial y Precisa' },
+    feat2_p: { en: 'Your financial information is always handled with care.', es: 'Tu información financiera siempre se maneja con cuidado.' },
+    feat3_h: { en: 'On-Time, Every Time', es: 'Siempre a Tiempo' },
+    feat3_p: { en: 'Payroll, 1099s and TPT filings, always filed on schedule.', es: 'Nómina, 1099 y trámites de TPT, siempre presentados a tiempo.' },
+    feat4_h: { en: 'Here When You Need Us', es: 'Aquí Cuando Nos Necesites' },
+    feat4_p: { en: 'Call or text anytime with day-to-day questions — real support, always.', es: 'Llama o envía un mensaje cuando quieras con dudas del día a día — soporte real, siempre.' },
+
+    services_eyebrow: { en: 'Our Services', es: 'Nuestros Servicios' },
+    services_h2: { en: 'Everything your business books need', es: 'Todo lo que tu negocio necesita en contabilidad' },
+    services_p: { en: 'Pricing is tailored to the size and needs of your business — request a free, no-obligation quote for any service below.', es: 'El precio se adapta al tamaño y las necesidades de tu negocio — solicita una cotización gratuita y sin compromiso para cualquiera de estos servicios.' },
+    service_quote_link: { en: 'Request a Quote', es: 'Solicitar Cotización' },
+
+    svc1_h: { en: 'Bookkeeping', es: 'Contabilidad' },
+    svc1_p: { en: 'Accurate, up-to-date monthly bookkeeping tailored to your business.', es: 'Contabilidad mensual precisa y actualizada, hecha a la medida de tu negocio.' },
+    svc1_inc1: { en: 'Monthly financial statements — Profit &amp; Loss, Balance Sheet &amp; more', es: 'Estados financieros mensuales — Estado de Resultados, Balance General y más' },
+    svc1_inc2: { en: 'Personalized service for every client', es: 'Servicio personalizado para cada cliente' },
+    svc1_inc3: { en: 'Call or text anytime with day-to-day questions — real support, always', es: 'Llama o envía un mensaje cuando quieras con dudas del día a día — soporte real, siempre' },
+    svc2_h: { en: 'LLC Formation &amp; Amendments', es: 'Formación y Enmiendas de LLC' },
+    svc2_p: { en: 'Start your LLC the right way, or update your existing filings without the paperwork headache.', es: 'Inicia tu LLC de la forma correcta, o actualiza tus trámites existentes sin el dolor de cabeza del papeleo.' },
+    svc3_h: { en: 'Payroll', es: 'Nómina' },
+    svc3_p: { en: 'Reliable, compliant payroll processing so your team is always paid accurately and on time.', es: 'Procesamiento de nómina confiable y en regla para que tu equipo siempre cobre correctamente y a tiempo.' },
+    svc4_h: { en: '1099-NEC Filing', es: 'Presentación de 1099-NEC' },
+    svc4_p: { en: 'Contractor filings prepared and submitted correctly, before deadlines catch you off guard.', es: 'Trámites de contratistas preparados y presentados correctamente, antes de que las fechas límite te tomen por sorpresa.' },
+    svc5_h: { en: 'TPT Applications', es: 'Solicitudes de TPT' },
+    svc5_p: { en: 'Arizona Transaction Privilege Tax license applications, handled from start to finish.', es: 'Solicitudes de licencia de Transaction Privilege Tax de Arizona, gestionadas de principio a fin.' },
+
+    booking_eyebrow: { en: 'Free Consultation', es: 'Consulta Gratis' },
+    booking_h2: { en: 'Book your consultation or call', es: 'Agenda tu consulta o llamada' },
+    booking_p: { en: "Tell us a bit about your business and preferred time — we'll confirm your free consultation or call directly. <strong>Service is by appointment only.</strong>", es: 'Cuéntanos un poco sobre tu negocio y tu horario preferido — confirmaremos tu consulta gratuita o llamada directamente. <strong>El servicio es solo con cita previa.</strong>' },
+    cal_btn: { en: 'Book Instantly on Google Calendar', es: 'Agenda al Instante en Google Calendar' },
+    q_cell: { en: 'Cell', es: 'Celular' },
+    q_office: { en: 'Office', es: 'Oficina' },
+    q_email: { en: 'Email', es: 'Correo' },
+    booking_note: { en: "Or fill out the form and we'll confirm your appointment directly.", es: 'O llena el formulario y confirmaremos tu cita directamente.' },
+
+    form_name: { en: 'Full Name', es: 'Nombre Completo' },
+    form_name_ph: { en: 'Jane Smith', es: 'Juana Pérez' },
+    form_phone: { en: 'Phone', es: 'Teléfono' },
+    form_phone_ph: { en: '(602) 000-0000', es: '(602) 000-0000' },
+    form_email: { en: 'Email', es: 'Correo Electrónico' },
+    form_email_ph: { en: 'you@email.com', es: 'tu@correo.com' },
+    form_service: { en: 'Service Interested In', es: 'Servicio de Interés' },
+    opt_bookkeeping: { en: 'Bookkeeping', es: 'Contabilidad' },
+    opt_llc: { en: 'LLC Formation &amp; Amendments', es: 'Formación y Enmiendas de LLC' },
+    opt_payroll: { en: 'Payroll', es: 'Nómina' },
+    opt_1099: { en: '1099-NEC Filing', es: 'Presentación de 1099-NEC' },
+    opt_tpt: { en: 'TPT Applications', es: 'Solicitudes de TPT' },
+    opt_notsure: { en: 'Not sure yet', es: 'Aún no estoy seguro' },
+    form_date: { en: 'Preferred Date', es: 'Fecha Preferida' },
+    form_time: { en: 'Preferred Time', es: 'Hora Preferida' },
+    form_msg: { en: 'Message', es: 'Mensaje' },
+    form_msg_ph: { en: 'Tell us a bit about your business...', es: 'Cuéntanos un poco sobre tu negocio...' },
+    form_submit: { en: 'Request Appointment', es: 'Solicitar Cita' },
+    form_sending: { en: 'Sending...', es: 'Enviando...' },
+    form_success_mailto: { en: 'Thanks! Your email app should now be open with your request ready to send to Rocio.', es: '¡Gracias! Tu aplicación de correo debería estar abierta con tu solicitud lista para enviar a Rocio.' },
+    form_success_sent: { en: "Thanks! Your consultation request was sent — we'll be in touch soon.", es: '¡Gracias! Tu solicitud de consulta fue enviada — nos pondremos en contacto pronto.' },
+
+    contact_eyebrow: { en: 'Contact', es: 'Contacto' },
+    contact_h2: { en: "Let's talk about your business", es: 'Hablemos de tu negocio' },
+    hours_label: { en: 'Business Hours', es: 'Horario de Atención' },
+    hours_weekday: { en: 'Monday &ndash; Friday · 10:00 AM &ndash; 6:00 PM', es: 'Lunes &ndash; Viernes · 10:00 AM &ndash; 6:00 PM' },
+    hours_sat: { en: 'Saturday · 10:00 AM &ndash; 3:00 PM', es: 'Sábado · 10:00 AM &ndash; 3:00 PM' },
+    hours_note: { en: 'By appointment only', es: 'Solo con cita previa' },
+    area_label: { en: 'Service Area', es: 'Área de Servicio' },
+    area_value: { en: 'Serving businesses across Arizona', es: 'Atendiendo negocios en todo Arizona' },
+    email_label: { en: 'Email', es: 'Correo' },
+    efax_label: { en: 'eFax', es: 'eFax' },
+    map_desc: { en: 'Bookkeeping &amp; More &mdash; Free Consultation available for every new client.', es: 'Contabilidad y Más &mdash; Consulta gratuita disponible para cada nuevo cliente.' },
+
+    footer_copy: { en: '&copy; 2026 VVV Services LLC. All rights reserved.', es: '&copy; 2026 VVV Services LLC. Todos los derechos reservados.' },
+    wa_aria: { en: 'Chat on WhatsApp', es: 'Chatea por WhatsApp' }
+  };
+
+  const TITLES = {
+    en: 'VVV Services LLC | Bookkeeping & More in Arizona — Free Consultation',
+    es: 'VVV Services LLC | Contabilidad y Más en Arizona — Consulta Gratis'
+  };
+  const DESCRIPTIONS = {
+    en: 'Professional bookkeeping, payroll, LLC formation, 1099-NEC filing and TPT applications in Arizona. Book your free consultation with VVV Services LLC today.',
+    es: 'Contabilidad profesional, nómina, formación de LLC, presentación de 1099-NEC y solicitudes de TPT en Arizona. Agenda tu consulta gratuita con VVV Services LLC hoy mismo.'
+  };
+  const WA_TEXT = {
+    en: "Hi, I'd like to book a free consultation with VVV Services LLC",
+    es: 'Hola, me gustaría agendar una consulta gratuita con VVV Services LLC'
+  };
+
+  let currentLang = 'en';
+  function t(key){ return I18N[key] ? I18N[key][currentLang] : ''; }
+
+  const langModal = document.getElementById('langModal');
+  const langSwitch = document.getElementById('langSwitch');
+  const waFloat = document.querySelector('.whatsapp-float');
+
+  function applyLanguage(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (I18N[key]) el.innerHTML = I18N[key][lang];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.dataset.i18nHtml;
+      if (I18N[key]) el.innerHTML = I18N[key][lang];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if (I18N[key]) el.placeholder = I18N[key][lang];
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      const key = el.dataset.i18nAria;
+      if (I18N[key]) el.setAttribute('aria-label', I18N[key][lang]);
+    });
+    document.title = TITLES[lang];
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', DESCRIPTIONS[lang]);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', TITLES[lang]);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', DESCRIPTIONS[lang]);
+    if (waFloat) waFloat.href = `https://wa.me/16236336023?text=${encodeURIComponent(WA_TEXT[lang])}`;
+    if (langSwitch) {
+      langSwitch.innerHTML = lang === 'en' ? '&#127760; ES' : '&#127760; EN';
+      langSwitch.title = lang === 'en' ? 'Cambiar a Español' : 'Switch to English';
+    }
+    localStorage.setItem('vvv_lang', lang);
+  }
+
+  function hideLangModal(){
+    langModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  langModal.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyLanguage(btn.dataset.lang);
+      hideLangModal();
+    });
+  });
+
+  langSwitch.addEventListener('click', () => {
+    applyLanguage(currentLang === 'en' ? 'es' : 'en');
+  });
+
+  const savedLang = localStorage.getItem('vvv_lang');
+  if (savedLang) {
+    applyLanguage(savedLang);
+    hideLangModal();
+  } else {
+    document.body.style.overflow = 'hidden';
+    applyLanguage('en');
+  }
+
   const nav = document.getElementById('nav');
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
@@ -700,9 +930,21 @@
   const dateInput = document.getElementById('fdate');
   dateInput.min = new Date().toISOString().split('T')[0];
 
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
   const form = document.getElementById('bookingForm');
   const success = document.getElementById('formSuccess');
-  form.addEventListener('submit', (e) => {
+  const submitBtn = form.querySelector('.form-submit');
+
+  function buildMailto(name, phone, email, service, date, time, msg) {
+    const subject = encodeURIComponent(`Consultation Request from ${name}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\nPreferred Date: ${date}\nPreferred Time: ${time}\n\nMessage:\n${msg}`
+    );
+    return `mailto:rocio@vvvservicesaz.com?subject=${subject}&body=${body}`;
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('fname').value;
     const phone = document.getElementById('fphone').value;
@@ -711,12 +953,45 @@
     const date = document.getElementById('fdate').value;
     const time = document.getElementById('ftime').value;
     const msg = document.getElementById('fmsg').value;
-    const subject = encodeURIComponent(`Consultation Request from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\nPreferred Date: ${date}\nPreferred Time: ${time}\n\nMessage:\n${msg}`
-    );
-    window.location.href = `mailto:rocio@vvvservicesaz.com?subject=${subject}&body=${body}`;
-    success.classList.add('show');
+
+    if (FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+      window.location.href = buildMailto(name, phone, email, service, date, time, msg);
+      success.textContent = t('form_success_mailto');
+      success.classList.add('show');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = t('form_sending');
+    try {
+      const fd = new FormData();
+      fd.append('name', name);
+      fd.append('phone', phone);
+      fd.append('email', email);
+      fd.append('service', service);
+      fd.append('preferred_date', date);
+      fd.append('preferred_time', time);
+      fd.append('message', msg);
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: fd
+      });
+      if (res.ok) {
+        success.textContent = t('form_success_sent');
+        success.classList.add('show');
+        form.reset();
+      } else {
+        throw new Error('Formspree error');
+      }
+    } catch (err) {
+      window.location.href = buildMailto(name, phone, email, service, date, time, msg);
+      success.textContent = t('form_success_mailto');
+      success.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = t('form_submit');
+    }
   });
 })();
 </script>
