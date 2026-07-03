@@ -163,6 +163,7 @@
     font-weight:800;font-size:14.5px;color:var(--navy);transition:all .25s ease;font-family:'Lato',sans-serif;
   }
   .lang-btn .flag{font-size:28px;}
+  .lang-btn .flag-img{width:32px;height:32px;object-fit:contain;border-radius:50%;}
   .lang-btn:hover{border-color:var(--gold);background:rgba(201,162,39,.06);transform:translateY(-3px);}
 
   /* ---------- HERO ---------- */
@@ -419,7 +420,7 @@
     <p>Choose your language to continue<br>Elige tu idioma para continuar</p>
     <div class="lang-modal-btns">
       <button type="button" class="lang-btn" data-lang="en"><span class="flag">&#127482;&#127480;</span> English</button>
-      <button type="button" class="lang-btn" data-lang="es"><span class="flag">&#127474;&#127485;</span> Espa&ntilde;ol</button>
+      <button type="button" class="lang-btn" data-lang="es"><img class="flag-img" src="assets/bandera-latam.jpg" alt="Latin America flag"> Espa&ntilde;ol</button>
     </div>
   </div>
 </div>
@@ -849,13 +850,14 @@
 
   langModal.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      applyLanguage(btn.dataset.lang);
-      hideLangModal();
+      localStorage.setItem('vvv_lang', btn.dataset.lang);
+      window.location.reload();
     });
   });
 
   langSwitch.addEventListener('click', () => {
-    applyLanguage(currentLang === 'en' ? 'es' : 'en');
+    localStorage.setItem('vvv_lang', currentLang === 'en' ? 'es' : 'en');
+    window.location.reload();
   });
 
   const savedLang = localStorage.getItem('vvv_lang');
