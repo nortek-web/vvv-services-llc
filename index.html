@@ -267,6 +267,18 @@
   .feat-item h4{font-size:16.5px;margin-bottom:8px;}
   .feat-item p{font-size:14px;color:var(--gray);}
 
+  .credentials-strip{grid-column:1/-1;margin-top:56px;padding-top:56px;border-top:1px solid var(--border);text-align:center;}
+  .credentials-strip h4{font-size:13.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);font-weight:900;margin-bottom:40px;}
+  .credential-badges{display:flex;justify-content:center;align-items:flex-end;gap:72px;flex-wrap:wrap;}
+  .credential-badge{display:flex;flex-direction:column;align-items:center;gap:18px;}
+  .credential-badge img{height:220px;width:auto;object-fit:contain;filter:drop-shadow(0 14px 26px rgba(11,31,63,.18));}
+  .credential-badge span{font-size:15px;font-weight:800;color:var(--navy);letter-spacing:.2px;}
+
+  @media(max-width:600px){
+    .credential-badges{gap:36px;}
+    .credential-badge img{height:150px;}
+  }
+
   @media(max-width:900px){
     .about .wrap{grid-template-columns:1fr;gap:56px;}
     .about-features{grid-template-columns:1fr 1fr;}
@@ -480,7 +492,7 @@
         <img src="assets/rocio-avila.jpg" alt="GD Rocio Avila, Bookkeeping Specialist at VVV Services LLC">
       </div>
       <div class="stat-chip">
-        <div class="num" data-count="6">0</div>
+        <div class="num" data-count="7">0</div>
         <div class="label" data-i18n="stat_label">Core Services</div>
       </div>
     </div>
@@ -507,6 +519,20 @@
         <p data-i18n="feat4_p">Call or text anytime with day-to-day questions — real support, always.</p>
       </div>
     </div>
+
+    <div class="credentials-strip reveal">
+      <h4 data-i18n="credentials_h">Certified &amp; Credentialed</h4>
+      <div class="credential-badges">
+        <div class="credential-badge">
+          <img src="assets/badge-proadvisor-gold.png" alt="Intuit ProAdvisor Gold badge">
+          <span data-i18n="cred_proadvisor">Intuit ProAdvisor — Gold</span>
+        </div>
+        <div class="credential-badge">
+          <img src="assets/cert-aipb.jpg" alt="AIPB Certificate of Membership for GD Rocio Avila">
+          <span data-i18n="cred_aipb">AIPB Certified Bookkeeper</span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -527,6 +553,18 @@
           <li data-i18n="svc1_inc1">Monthly financial statements — Profit &amp; Loss, Balance Sheet &amp; more</li>
           <li data-i18n="svc1_inc2">Personalized service for every client</li>
           <li data-i18n="svc1_inc3">Call or text anytime with day-to-day questions — real support, always</li>
+        </ul>
+        <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h3 data-i18n="svc_addon_h">Bookkeeping Add-Ons</h3>
+        <p data-i18n="svc_addon_p">Extra support to get your books current and keep your team paid on time.</p>
+        <ul class="service-includes">
+          <li data-i18n="svc_addon_inc1">Monthly Bookkeeping</li>
+          <li data-i18n="svc_addon_inc2">Catch-Up/Clean Up Books</li>
+          <li data-i18n="svc_addon_inc3">Payroll Management</li>
         </ul>
         <a href="#booking" class="service-quote"><span data-i18n="service_quote_link">Request a Quote</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
@@ -618,6 +656,7 @@
         <label for="fservice" data-i18n="form_service">Service Interested In</label>
         <select id="fservice">
           <option data-i18n="opt_bookkeeping">Bookkeeping</option>
+          <option data-i18n="opt_addon">Bookkeeping Add-Ons</option>
           <option data-i18n="opt_llc">LLC Formation &amp; Amendments</option>
           <option data-i18n="opt_payroll">Payroll</option>
           <option data-i18n="opt_1099">1099-NEC Filing</option>
@@ -731,6 +770,10 @@
     feat4_h: { en: 'Here When You Need Us', es: 'Aquí Cuando Nos Necesites' },
     feat4_p: { en: 'Call or text anytime with day-to-day questions — real support, always.', es: 'Llama o envía un mensaje cuando quieras con dudas del día a día — soporte real, siempre.' },
 
+    credentials_h: { en: 'Certified &amp; Credentialed', es: 'Certificada y Acreditada' },
+    cred_proadvisor: { en: 'Intuit ProAdvisor — Gold', es: 'Intuit ProAdvisor — Gold' },
+    cred_aipb: { en: 'AIPB Certified Bookkeeper', es: 'Contadora Certificada por AIPB' },
+
     services_eyebrow: { en: 'Our Services', es: 'Nuestros Servicios' },
     services_h2: { en: 'Everything your business books need', es: 'Todo lo que tu negocio necesita en contabilidad' },
     services_p: { en: 'Pricing is tailored to the size and needs of your business — request a free, no-obligation quote for any service below.', es: 'El precio se adapta al tamaño y las necesidades de tu negocio — solicita una cotización gratuita y sin compromiso para cualquiera de estos servicios.' },
@@ -741,6 +784,11 @@
     svc1_inc1: { en: 'Monthly financial statements — Profit &amp; Loss, Balance Sheet &amp; more', es: 'Estados financieros mensuales — Estado de Resultados, Balance General y más' },
     svc1_inc2: { en: 'Personalized service for every client', es: 'Servicio personalizado para cada cliente' },
     svc1_inc3: { en: 'Call or text anytime with day-to-day questions — real support, always', es: 'Llama o envía un mensaje cuando quieras con dudas del día a día — soporte real, siempre' },
+    svc_addon_h: { en: 'Bookkeeping Add-Ons', es: 'Servicios Adicionales de Contabilidad' },
+    svc_addon_p: { en: 'Extra support to get your books current and keep your team paid on time.', es: 'Apoyo adicional para poner tus libros al día y mantener a tu equipo pagado a tiempo.' },
+    svc_addon_inc1: { en: 'Monthly Bookkeeping', es: 'Contabilidad Mensual' },
+    svc_addon_inc2: { en: 'Catch-Up/Clean Up Books', es: 'Actualización y Limpieza de Libros Contables' },
+    svc_addon_inc3: { en: 'Payroll Management', es: 'Administración de Nómina' },
     svc2_h: { en: 'LLC Formation &amp; Amendments', es: 'Formación y Enmiendas de LLC' },
     svc2_p: { en: 'Start your LLC the right way, or update your existing filings without the paperwork headache.', es: 'Inicia tu LLC de la forma correcta, o actualiza tus trámites existentes sin el dolor de cabeza del papeleo.' },
     svc3_h: { en: 'Payroll', es: 'Nómina' },
@@ -769,6 +817,7 @@
     form_email_ph: { en: 'you@email.com', es: 'tu@correo.com' },
     form_service: { en: 'Service Interested In', es: 'Servicio de Interés' },
     opt_bookkeeping: { en: 'Bookkeeping', es: 'Contabilidad' },
+    opt_addon: { en: 'Bookkeeping Add-Ons', es: 'Servicios Adicionales de Contabilidad' },
     opt_llc: { en: 'LLC Formation &amp; Amendments', es: 'Formación y Enmiendas de LLC' },
     opt_payroll: { en: 'Payroll', es: 'Nómina' },
     opt_1099: { en: '1099-NEC Filing', es: 'Presentación de 1099-NEC' },
