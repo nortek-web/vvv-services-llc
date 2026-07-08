@@ -274,9 +274,26 @@
   .credential-badge img{height:220px;width:auto;object-fit:contain;filter:drop-shadow(0 14px 26px rgba(11,31,63,.18));}
   .credential-badge span{font-size:15px;font-weight:800;color:var(--navy);letter-spacing:.2px;}
 
+  .years-badge{
+    width:200px;height:200px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle at 32% 28%,var(--navy-2),var(--navy-3) 72%);
+    border:4px solid var(--gold);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    filter:drop-shadow(0 14px 26px rgba(11,31,63,.18));
+    position:relative;
+  }
+  .years-badge::before{
+    content:'';position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(232,205,119,.55);
+  }
+  .years-badge .years-num{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:var(--gold-light);line-height:1;}
+  .years-badge .years-txt{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.85);text-align:center;margin-top:8px;padding:0 22px;line-height:1.5;}
+
   @media(max-width:600px){
     .credential-badges{gap:36px;}
     .credential-badge img{height:150px;}
+    .years-badge{width:140px;height:140px;}
+    .years-badge .years-num{font-size:32px;}
+    .years-badge .years-txt{font-size:9.5px;padding:0 14px;}
   }
 
   @media(max-width:900px){
@@ -531,6 +548,13 @@
           <img src="assets/cert-aipb.jpg" alt="AIPB Certificate of Membership for GD Rocio Avila">
           <span data-i18n="cred_aipb">AIPB Certified Bookkeeper</span>
         </div>
+        <div class="credential-badge">
+          <div class="years-badge">
+            <span class="years-num">10+</span>
+            <span class="years-txt" data-i18n="years_badge_txt">Years of Experience</span>
+          </div>
+          <span data-i18n="cred_years">More than 10 years of experience</span>
+        </div>
       </div>
     </div>
   </div>
@@ -748,6 +772,19 @@
 
 <script>
 (function(){
+  setTimeout(function(){
+    document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right').forEach(function(el){
+      el.classList.add('is-visible');
+    });
+  }, 2500);
+
+  function safeGetLang(){
+    try { return localStorage.getItem('vvv_lang'); } catch (e) { return null; }
+  }
+  function safeSetLang(lang){
+    try { localStorage.setItem('vvv_lang', lang); } catch (e) {}
+  }
+
   const I18N = {
     brand_tagline: { en: 'Bookkeeping &amp; More', es: 'Contabilidad y M&aacute;s' },
     nav_about: { en: 'About', es: 'Nosotros' },
@@ -781,6 +818,8 @@
     credentials_h: { en: 'Certified &amp; Credentialed', es: 'Certificada y Acreditada' },
     cred_proadvisor: { en: 'Intuit ProAdvisor — Gold', es: 'Intuit ProAdvisor — Gold' },
     cred_aipb: { en: 'AIPB Certified Bookkeeper', es: 'Contadora Certificada por AIPB' },
+    years_badge_txt: { en: 'Years of Experience', es: 'Años de Experiencia' },
+    cred_years: { en: 'More than 10 years of experience', es: 'Más de 10 años de experiencia' },
 
     services_eyebrow: { en: 'Our Services', es: 'Nuestros Servicios' },
     services_h2: { en: 'Everything your business books need', es: 'Todo lo que tu negocio necesita en contabilidad' },
@@ -911,7 +950,7 @@
       langSwitch.innerHTML = lang === 'en' ? '&#127760; ES' : '&#127760; EN';
       langSwitch.title = lang === 'en' ? 'Cambiar a Español' : 'Switch to English';
     }
-    localStorage.setItem('vvv_lang', lang);
+    safeSetLang(lang);
   }
 
   function hideLangModal(){
@@ -921,17 +960,17 @@
 
   langModal.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      localStorage.setItem('vvv_lang', btn.dataset.lang);
+      safeSetLang(btn.dataset.lang);
       window.location.reload();
     });
   });
 
   langSwitch.addEventListener('click', () => {
-    localStorage.setItem('vvv_lang', currentLang === 'en' ? 'es' : 'en');
+    safeSetLang(currentLang === 'en' ? 'es' : 'en');
     window.location.reload();
   });
 
-  const savedLang = localStorage.getItem('vvv_lang');
+  const savedLang = safeGetLang();
   if (savedLang) {
     applyLanguage(savedLang);
     hideLangModal();
